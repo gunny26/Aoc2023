@@ -17,41 +17,25 @@ with open("input1.txt", "rt") as infile:
         positions[position] = (left, right)
     print()
 
-    # get initial start positions
-    start_positions = [key for key in positions.keys() if key[2] == "A"]
-    print(start_positions)
-    len_start_positions = list(range(len(start_positions)))  # calculate only once
-
-    # dones = {}  # loophole detection
+    position = "AAA"  # initial start positions
 
     starttime = time.time()
     steps = 0
 
-    while not all((position[2] == "Z" for position in start_positions)):
+    while True:
         direction = directions[steps % len_directions]
+        if direction == "L":
+            position = positions[position][0]
+        else:
+            position = positions[position][1]
 
-        for position_id in len_start_positions:
-            # print(position, direction)
-            position = start_positions[position_id]
-            if direction == "L":
-                start_positions[position_id] = positions[position][0]
-            else:
-                start_positions[position_id] = positions[position][1]
-        # print(start_positions)
-
-        # loophole detection
-        # key = "".join(start_positions)
-        # if key in dones:
-        #     break
-        # dones[key] = direction
-
-        # if all((position[2] == "Z" for position in start_positions)):
-        #     break
+        if position == "ZZZ":
+            break
 
         steps += 1
         if steps % 1000000 == 0:
-            print(start_positions, steps, time.time()-starttime)
+            print(position, steps, time.time()-starttime)
             starttime = time.time()
 
-    print(start_positions)
-    print("all positions ending with Z found in ", steps, " steps")
+    print(position)
+    print("position ZZZ found in ", steps, " steps")
