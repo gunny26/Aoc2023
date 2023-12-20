@@ -62,8 +62,8 @@ with open("input1.txt", "rt") as infile:
         print(intervals[start_position])
 
 
-    # add up all paths to number of steps so far and interval of
-    # repeating steps to get to the same entry
+    # add up all paths to number of steps and interval of repeating
+    # pattern
     sum_steps = {}
     for start_position, series in intervals.items():
         print(start_position, series)
@@ -74,44 +74,33 @@ with open("input1.txt", "rt") as infile:
 
     # brute force until all paths are at the same step - like lcm but
     # steps to first found target is the problem
+    starttime = time.time()
 
     values = list(sum_steps.values())  # list of [start, step]
     print(values)
 
-    # get the value with highest step_size
-    # add up to entry with highest step count
-    # from there on ad
-    # searching entry with highest steps
-    test_entry = values[0]
-    for value in values[1:]:
-        if value[0] > test_entry[0]:
-            test_entry = value
-    print(f"using this value to test lcm {test_entry}")
-
-    values.remove(test_entry)
-
-    starttime = time.time()
-    index = 0
-
+    index = 5
     while True:
 
-        result = [(test_entry[0] - step) % step_size for (step, step_size) in values[1:]]  # test all other value if they could get to this step without reminder
-
-        if result.count(0) > 1:
-            print("remainders ", result)
-            # print(values)
-
-        if not any(result):
-            print("remainders ", result)
-            print("result ", test_entry)
+        # checking if all steps are the same
+        first_value = values[0][0]  # compare to first value
+        if all((entry[0] == first_value for entry in values[1:])):
+            print("found the least common multiplier ", values, " after ", index, " iterations")
             break
 
-        test_entry[0] = test_entry[0] + test_entry[1]
+        min_steps = min((value[0] for value in values))  # add up path with lowest steps
+        for value in values:
+            if value[0] == min_steps:
+                value[0] = value[0] + value[1]
 
-        index += 1
         if index % 10**6 == 0:
-            print(f"duration for 10**6 iterations {(time.time()-starttime):0.2f}, steps {test_entry}")
+            print("duration for 1 000 000 cycles: ", time.time() - starttime)
+            print(index)
+            for value in values:
+                print(value)
             starttime = time.time()
+        index += 1
+
 
 """
 
