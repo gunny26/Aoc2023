@@ -13,4 +13,8 @@ calculate diff and afterword the missing values
 
 ## part 2
 
---- still trying ---
+a that was a lucky day, only had to add one line and cahnge from + to -
+
+done in 5 minutes.
+
+Yuhu
