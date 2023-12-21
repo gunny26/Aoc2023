@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 import sys
-from math import lcm
 import time
+
+from lcm import lcm_with_offset
 
 
 with open("input1.txt", "rt") as infile:
@@ -67,8 +68,8 @@ with open("input1.txt", "rt") as infile:
     sum_steps = {}
     for start_position, series in intervals.items():
         print(start_position, series)
-        step_size = series[-1]
-        steps = sum(series)
+        step_size = series[-1]  # steps in interval
+        steps = series[0]  # initial
         print(steps, step_size)
         sum_steps[start_position] = [steps, step_size]
 
@@ -78,42 +79,12 @@ with open("input1.txt", "rt") as infile:
     values = list(sum_steps.values())  # list of [start, step]
     print(values)
 
-    # get the value with highest step_size
-    # add up to entry with highest step count
-    # from there on ad
-    # searching entry with highest steps
-    test_entry = values[0]
-    for value in values[1:]:
-        if value[0] > test_entry[0]:
-            test_entry = value
-    print(f"using this value to test lcm {test_entry}")
+    print("calculating LCM with offset")
+    print(lcm_with_offset(*values))
 
-    values.remove(test_entry)
-
-    starttime = time.time()
-    index = 0
-
-    while True:
-
-        result = [(test_entry[0] - step) % step_size for (step, step_size) in values[1:]]  # test all other value if they could get to this step without reminder
-
-        if result.count(0) > 1:
-            print("remainders ", result)
-            # print(values)
-
-        if not any(result):
-            print("remainders ", result)
-            print("result ", test_entry)
-            break
-
-        test_entry[0] = test_entry[0] + test_entry[1]
-
-        index += 1
-        if index % 10**6 == 0:
-            print(f"duration for 10**6 iterations {(time.time()-starttime):0.2f}, steps {test_entry}")
-            starttime = time.time()
 
 """
+paths look like that
 
 **********************+---+---+---+---+---+---+---+---+---+
 *******+----+----+----+----+----+----+----+----+----+----+-
